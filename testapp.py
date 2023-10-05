@@ -1,12 +1,11 @@
 import streamlit as st
-import os
-import cv2
 import numpy as np
 from PIL import Image
 import zipfile
 import io
 import base64
-from keras.preprocessing.image import ImageDataGenerator
+import imgaug as ia
+import imgaug.augmenters as iaa
 
 st.set_page_config(
     page_icon='📃',
@@ -14,33 +13,22 @@ st.set_page_config(
     layout="wide"
 )
 
-# Function to perform image data augmentation
-def augment_image(image, num_images, rotation_range, width_shift_range, height_shift_range, shear_range, zoom_range):
+# Function to perform image data augmentation using imgaug
+def augment_image(image, num_images, rotation_range, width_shift_range, height_shift_range, shear_range):
     augmented_images = []
 
-    # Create an ImageDataGenerator for augmentation with user-adjustable parameters
-    datagen = ImageDataGenerator(
-        rotation_range=rotation_range,
-        width_shift_range=width_shift_range,
-        height_shift_range=height_shift_range,
-        shear_range=shear_range,
-        zoom_range=zoom_range,
-        horizontal_flip=True,
-        fill_mode='nearest'
-    )
+    # Define augmentation sequence
+    seq = iaa.Sequential([
+        iaa.Affine(
+            rotate=rotation_range,
+            translate_percent={"x": (-width_shift_range * 100, width_shift_range * 100), "y": (-height_shift_range * 100, height_shift_range * 100)},
+            shear=shear_range,
+        ),
+    ])
 
-    # Convert the PIL image to a NumPy array
-    image_array = np.array(image)
-    image_array = image_array.reshape((1,) + image_array.shape)
-
-    # Generate augmented images
-    i = 0
-    for batch in datagen.flow(image_array, batch_size=1):
-        augmented_image = batch[0].astype('uint8')
+    for _ in range(num_images):
+        augmented_image = seq.augment_image(np.array(image))
         augmented_images.append(augmented_image)
-        i += 1
-        if i >= num_images:
-            break
 
     return augmented_images
 
@@ -60,7 +48,6 @@ def main():
         You can fine-tune the augmentation parameters to customize the image augmentation.
         """
     )
-    
 
     # Upload an image
     uploaded_image = st.file_uploader("Step 1: Upload an image", type=["jpg", "png", "jpeg"])
@@ -74,13 +61,12 @@ def main():
         width_shift_range = st.slider("Width Shift Range", 0.0, 1.0, 0.2)
         height_shift_range = st.slider("Height Shift Range", 0.0, 1.0, 0.2)
         shear_range = st.slider("Shear Range", 0.0, 1.0, 0.2)
-        zoom_range = st.slider("Zoom Range", 0.0, 1.0, 0.2)
 
         # Input number of images to generate
         num_images = st.number_input("Step 3: Enter the number of images to generate", min_value=1, value=10)
 
         # Perform data augmentation
-        augmented_images = augment_image(image, num_images, rotation_range, width_shift_range, height_shift_range, shear_range, zoom_range)
+        augmented_images = augment_image(image, num_images, rotation_range, width_shift_range, height_shift_range, shear_range)
 
         # Create a ZIP file containing augmented images
         if st.button("Step 4: Download Augmented Images (ZIP)"):
