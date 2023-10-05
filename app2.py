@@ -102,5 +102,5 @@ def main():
                 st.success("Your Image has been Augmented successfully")
                 st.balloons()
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+main()
