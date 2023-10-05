@@ -1,6 +1,6 @@
 streamlit
 numpy
-PIL
+Pillow
 zipfile
 io
 base64
