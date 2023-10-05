@@ -3,5 +3,5 @@ numpy
 Pillow
 tensorflow==2.5.0
 keras==2.5.0
-SciPy ==1.9.3
+SciPy ==1.11.3
   # Specify the correct version of SciPy
