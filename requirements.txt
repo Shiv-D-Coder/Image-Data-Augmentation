@@ -2,6 +2,6 @@ streamlit==1.12.2
 numpy
 Pillow
 tensorflow==2.5.0
-keras==2.5.0
+keras==2.13.1
 SciPy ==1.11.3
   # Specify the correct version of SciPy
