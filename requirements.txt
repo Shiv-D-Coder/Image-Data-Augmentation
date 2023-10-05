@@ -1,7 +1,3 @@
 streamlit
 numpy
 Pillow
-zipfile
-io
-base64
-keras
