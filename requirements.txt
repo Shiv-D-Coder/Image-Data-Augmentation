@@ -1,7 +1,7 @@
-streamlit
+streamlit==1.12.2
 numpy
 Pillow
 tensorflow==2.5.0
 keras==2.5.0
-scipy==1.7.3
+SciPy ==1.9.3
   # Specify the correct version of SciPy
