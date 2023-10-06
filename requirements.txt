@@ -1,6 +1,6 @@
 streamlit
 numpy
 Pillow
-opencv-python
+zipfile
 imgaug
 opencv-python
