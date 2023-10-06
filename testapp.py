@@ -4,7 +4,6 @@ from PIL import Image
 import zipfile
 import io
 import base64
-# import cv2
 import imgaug as ia
 import imgaug.augmenters as iaa
 
